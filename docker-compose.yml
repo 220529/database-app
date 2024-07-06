@@ -1,0 +1,33 @@
+# Use root/example as user/password credentials
+version: "3.1"
+
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - 3306:3306
+    volumes:
+      - local_db:/var/lib/mysql
+    networks:
+      - local_network
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - ${ADMINER_PORT}:8080
+    depends_on:
+      - db
+    networks:
+      - local_network
+
+volumes:
+  local_db:
+    name: local_db
+networks:
+  local_network:
+    name: local_network
